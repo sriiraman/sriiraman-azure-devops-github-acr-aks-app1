@@ -1,0 +1,53 @@
+trigger:
+  branches:
+    include:
+      - main  # Trigger on changes to the 'main' branch
+
+pool:
+  vmImage: 'ubuntu-latest'  # Use the latest Ubuntu image
+
+variables:
+  buildConfiguration: 'Release'  # Set build configuration to Release
+
+jobs:
+- job: Build
+  steps:
+    # Checkout the code from the repository
+    - task: Checkout@1
+      displayName: 'Checkout code'
+    
+    # Install .NET (or replace with any other SDK for your application)
+    - task: UseDotNet@2
+      inputs:
+        packageType: 'sdk'
+        version: '6.x'  # Specify your required SDK version
+
+    # Restore dependencies
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore dependencies'
+      inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
+
+    # Build the project
+    - task: DotNetCoreCLI@2
+      displayName: 'Build project'
+      inputs:
+        command: 'build'
+        projects: '**/*.csproj'
+        arguments: '--configuration $(buildConfiguration)'
+
+    # Run tests
+    - task: DotNetCoreCLI@2
+      displayName: 'Run unit tests'
+      inputs:
+        command: 'test'
+        projects: '**/*.csproj'
+
+    # Publish the build artifact (e.g., output the build for release)
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish build artifacts'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
