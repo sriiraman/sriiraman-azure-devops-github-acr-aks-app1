@@ -2,12 +2,10 @@
 trigger:
 - master
 
-# Variables
 variables:
   tag: '$(Build.BuildId)'
 
 stages:
-# Build Stage 
 - stage: Build
   displayName: Build pannanum
   jobs:
