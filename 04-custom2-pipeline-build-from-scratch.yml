@@ -9,14 +9,14 @@ variables:
 stages:
 # Build Stage 
 - stage: Build
-  displayName: Build Stage
+  displayName: Build pannanum
   jobs:
   - job: Build
-    displayName: Build Job
+    displayName: Build pannitiya
     pool:
       vmImage: 'ubuntu-latest'
     steps: 
-
+ 
     - task: Docker@2
       inputs:
         containerRegistry: 'manual-aksdevopsacr-svc'
